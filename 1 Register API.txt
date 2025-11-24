@@ -1,0 +1,21 @@
+1. Register API
+
+POST http://localhost:8080/api/auth/register
+{
+  "username": "john_doe",
+  "designation": "Developer",
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+2. Login API
+
+POST http://localhost:8080/api/auth/login
+{
+  "username": "john_doe",
+  "password": "password123"
+}
+
+3. All users
+
+GET http://localhost:8080/users

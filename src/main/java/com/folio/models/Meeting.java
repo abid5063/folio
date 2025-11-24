@@ -14,11 +14,9 @@ public class Meeting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer meetingId;
+    private Long meetingId;
 
-    @ManyToOne
-    @JoinColumn(name = "initiatorId", nullable = false)
-    private User initiator;
+    private Long initiatorId;
 
     // Stored as a comma-separated list (as in the DB)
     private String collaboratorsId;
