@@ -18,4 +18,27 @@ POST http://localhost:8080/api/auth/login
 
 3. All users
 
-GET http://localhost:8080/users
+GET http://localhost:8080/api/user/all
+
+4. Meetings by date
+
+GET http://localhost:8080/api/{id}/meetings/filter?date=2025-11-27
+
+5. Meetings by initiatorID
+
+GET http://localhost:8080/api/user/{id}/meetings
+
+6. Add meetings
+
+POST http://localhost:8080/api/user/1/meetings
+
+{
+  "collaboratorsId": "12,15,19",
+  "startTime": "2025-01-10T10:00:00",
+  "endTime": "2025-01-10T11:00:00",
+  "agenda": "Project planning meeting"
+}
+
+7. Get user by 
+
+GET http://localhost:8080/api/user/{id}

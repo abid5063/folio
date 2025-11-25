@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User getUserByUserId(Long userid) {
+        return userRepository.findByUserid(userid);
+    }
+
     public LoginResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             return new LoginResponse(false, "Email already registered.");

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class MeetingService {
+
     private final MeetingRepository meetingRepository;
 
     public MeetingService(MeetingRepository meetingRepository) {
@@ -21,12 +22,18 @@ public class MeetingService {
     }
 
     public Optional<Meeting> getConflictingMeeting(Meeting meeting) {
-        return meetingRepository.findConflictingMeeting(meeting.getInitiatorId(),
-                meeting.getStartTime(), meeting.getEndTime());
+        return meetingRepository.findConflictingMeeting(
+                meeting.getInitiatorId(),
+                meeting.getStartTime(),
+                meeting.getEndTime()
+        );
     }
 
     public boolean addMeeting(Meeting meeting) {
-        if (getConflictingMeeting(meeting).isEmpty()) return false;
+        // If a conflict exists → do NOT save
+        if (getConflictingMeeting(meeting).isPresent()) {
+            return false;
+        }
         meetingRepository.save(meeting);
         return true;
     }
@@ -35,8 +42,10 @@ public class MeetingService {
         return meetingRepository.findByDate(date, initiatorId);
     }
 
-    public Optional<Meeting> getMeetingsByDateAndTime(LocalDate date, LocalDateTime start,
-                                                  LocalDateTime end, Long initiatorId) {
+    public Optional<Meeting> getMeetingsByDateAndTime(LocalDate date,
+                                                      LocalDateTime start,
+                                                      LocalDateTime end,
+                                                      Long initiatorId) {
         return meetingRepository.findByDateAndTime(date, start, end, initiatorId);
     }
 }
