@@ -1,6 +1,7 @@
 CREATE TABLE users (
     userid SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
+    name VARCHAR(256) NOT NULL,
     designation VARCHAR(100),
     email VARCHAR(100),
     password VARCHAR(256) NOT NULL

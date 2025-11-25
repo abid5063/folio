@@ -13,6 +13,8 @@ public class User {
     @Column(nullable = false)
     private String username;
 
+    private String name;
+
     private String designation;
 
     @Column(unique = true)
@@ -26,6 +28,15 @@ public class User {
     public void setUserid(Long userid) { this.userid = userid; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDesignation() { return designation; }
     public void setDesignation(String designation) { this.designation = designation; }
     public String getEmail() { return email; }
