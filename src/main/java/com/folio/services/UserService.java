@@ -31,10 +31,10 @@ public class UserService {
 
     public LoginResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            return new LoginResponse(false, "Email already registered.");
+            return new LoginResponse(false, "Email already registered.", null, null);
         }
         if (userRepository.existsByUsername(request.getUsername())) {
-            return new LoginResponse(false, "Username already taken.");
+            return new LoginResponse(false, "Username already taken.", null, null);
         }
 
         User user = new User();
@@ -45,19 +45,20 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(user);
-        return new LoginResponse(true, "User registered successfully.");
+        return new LoginResponse(true, "User registered successfully.",
+                user.getUsername(), user.getUserid());
     }
 
     public LoginResponse login(LoginRequest request) {
-        return userRepository.findByUsername(request.getUsername())
-                .map(user -> {
-                    if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-                        return new LoginResponse(true, "Login successful.");
-                    } else {
-                        return new LoginResponse(false, "Invalid password.");
-                    }
-                })
-                .orElse(new LoginResponse(false, "User not found."));
+        User user = userRepository.findByUsername(request.getUsername());
+        if (user == null) return new LoginResponse(false, "User not found", null, null);
+        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return new LoginResponse(true, "Login successful.",
+                    user.getUsername(), user.getUserid());
+        } else {
+            return new LoginResponse(false, "Invalid password.",
+                    null, null);
+        }
     }
 
 }
