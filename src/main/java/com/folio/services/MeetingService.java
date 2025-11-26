@@ -73,4 +73,14 @@ public class MeetingService {
         LocalDateTime dateStart = date.atStartOfDay();
         return meetingRepository.findByUserAndDate(id, dateStart);
     }
+
+    public boolean deleteMeeting(Long meetingId) {
+        if (!meetingRepository.existsById(meetingId)) {
+            return false; // meeting doesn't exist
+        }
+
+        meetingRepository.deleteById(meetingId);
+        return true;
+    }
+
 }

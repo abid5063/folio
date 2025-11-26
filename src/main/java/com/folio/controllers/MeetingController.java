@@ -52,4 +52,16 @@ public class MeetingController {
 
         return ResponseEntity.ok("Meeting created successfully!");
     }
+
+    @DeleteMapping("/delete/{meetingId}")
+    public ResponseEntity<String> deleteMeeting(@PathVariable Long meetingId) {
+        boolean deleted = meetingService.deleteMeeting(meetingId);
+
+        if (!deleted) {
+            return ResponseEntity.badRequest().body("Meeting not found or could not be deleted.");
+        }
+
+        return ResponseEntity.ok("Meeting deleted successfully.");
+    }
+
 }
