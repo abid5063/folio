@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,10 @@ public class MeetingService {
 
     public MeetingService(MeetingRepository meetingRepository) {
         this.meetingRepository = meetingRepository;
+    }
+
+    public List<Meeting> getAllMeeting() {
+        return meetingRepository.findAll();
     }
 
     public Optional<Meeting> getMeetingsByInitiatorId(Long id) {
