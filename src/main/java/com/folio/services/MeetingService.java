@@ -1,13 +1,13 @@
 package com.folio.services;
 
+import com.folio.dtos.MeetingRequestDTO;
 import com.folio.models.Meeting;
 import com.folio.repositories.MeetingRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MeetingService {
@@ -18,39 +18,59 @@ public class MeetingService {
         this.meetingRepository = meetingRepository;
     }
 
-    public List<Meeting> getAllMeeting() {
-        return meetingRepository.findAll();
-    }
+    // ------------------------- CREATE MEETING -------------------------
+    public boolean addMeeting(MeetingRequestDTO dto, Long id) {
 
-    public Optional<Meeting> getMeetingsByInitiatorId(Long id) {
-        return meetingRepository.findByInitiatorId(id);
-    }
+        // Parse collaborator IDs into List<Long>
+        List<Long> collaborators = dto.getCollaboratorsId() == null || dto.getCollaboratorsId().isBlank()
+                ? new ArrayList<>()
+                : Arrays.stream(dto.getCollaboratorsId().split(","))
+                .map(String::trim)
+                .map(Long::valueOf)
+                .toList();
 
-    public Optional<Meeting> getConflictingMeeting(Meeting meeting) {
-        return meetingRepository.findConflictingMeeting(
-                meeting.getInitiatorId(),
-                meeting.getStartTime(),
-                meeting.getEndTime()
-        );
-    }
 
-    public boolean addMeeting(Meeting meeting) {
-        // If a conflict exists → do NOT save
-        if (getConflictingMeeting(meeting).isPresent()) {
-            return false;
+        // 1) Check conflict for every collaborator + initiator
+        List<Long> everyone = new ArrayList<>(collaborators);
+        everyone.add(id);
+
+        for (Long i : everyone) {
+            List<Meeting> conflicts = meetingRepository.findConflicts(
+                    i,
+                    dto.getStartTime(),
+                    dto.getEndTime()
+            );
+
+            if (!conflicts.isEmpty()) {
+                return false;  // conflict found
+            }
         }
+
+        // 2) Save new meeting
+        Meeting meeting = new Meeting();
+        meeting.setInitiatorId(id);
+        meeting.setCollaboratorsId(dto.getCollaboratorsId());
+        meeting.setStartTime(dto.getStartTime());
+        meeting.setEndTime(dto.getEndTime());
+        meeting.setAgenda(dto.getAgenda());
+
         meetingRepository.save(meeting);
         return true;
     }
 
-    public Optional<Meeting> getMeetingsByDate(LocalDate date, Long initiatorId) {
-        return meetingRepository.findByDate(date, initiatorId);
+    // ------------------------- GET ALL MEETINGS -------------------------
+    public List<Meeting> getAllMeetings() {
+        return meetingRepository.findAll();
     }
 
-    public Optional<Meeting> getMeetingsByDateAndTime(LocalDate date,
-                                                      LocalDateTime start,
-                                                      LocalDateTime end,
-                                                      Long initiatorId) {
-        return meetingRepository.findByDateAndTime(date, start, end, initiatorId);
+    // ------------------------- GET USER MEETINGS -------------------------
+    public List<Meeting> getMeetingsByUser(Long id) {
+        return meetingRepository.findAllByUser(id);
+    }
+
+    // ------------------------- GET USER MEETINGS BY DATE -------------------------
+    public List<Meeting> getMeetingsByUserAndDate(Long id, LocalDate date) {
+        LocalDateTime dateStart = date.atStartOfDay();
+        return meetingRepository.findByUserAndDate(id, dateStart);
     }
 }
