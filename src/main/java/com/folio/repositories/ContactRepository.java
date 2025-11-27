@@ -6,19 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     @Query("""
-            SELECT c FROM Contact c
-            WHERE (:name IS NULL OR LOWER(c.name) = LOWER(:name))
-            AND (:institution IS NULL OR LOWER(c.institution) = LOWER(:institution))
-            AND (:designation IS NULL OR LOWER(c.designation) = LOWER(:designation))
-            AND (:relevantDept IS NULL OR LOWER(c.relevantDept) LIKE LOWER(CONCAT('%', :relevantDept, '%')))
-        """)
+        SELECT c FROM Contact c
+        WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))
+        AND LOWER(c.institution) LIKE LOWER(CONCAT('%', :institution, '%'))
+        AND LOWER(c.designation) LIKE LOWER(CONCAT('%', :designation, '%'))
+        AND LOWER(c.relevantDept) LIKE LOWER(CONCAT('%', :relevantDept, '%'))
+    """)
     List<Contact> filterContacts(
             @Param("name") String name,
             @Param("institution") String institution,
             @Param("designation") String designation,
-            @Param("relevantDept") String relevantDept
-    );
+            @Param("relevantDept") String relevantDept);
+
+
 }

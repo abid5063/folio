@@ -67,15 +67,10 @@ public class ContactService {
 
     public List<Contact> filterContacts(ContactFilterDTO filter) {
         return contactRepository.filterContacts(
-                emptyToNull(filter.getName()),
-                emptyToNull(filter.getInstitution()),
-                emptyToNull(filter.getDesignation()),
-                emptyToNull(filter.getRelevantDept())
+                filter.getName(),
+                filter.getInstitution(),
+                filter.getDesignation(),
+                filter.getRelevantDept()
         );
-    }
-
-    // Convert empty strings to null so filtering works properly
-    private String emptyToNull(String s) {
-        return (s == null || s.trim().isEmpty()) ? null : s.trim();
     }
 }

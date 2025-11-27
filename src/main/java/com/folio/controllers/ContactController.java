@@ -7,6 +7,7 @@ import com.folio.services.ContactService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/contact")
@@ -35,7 +36,7 @@ public class ContactController {
     }
 
     @PostMapping("/filter")
-    public List<Contact> getFilteredContacts(@RequestBody ContactFilterDTO contactFilterDTO) {
-        return contactService.filterContacts(contactFilterDTO);
+    public List<Contact> getFilteredContacts(@RequestBody ContactFilterDTO dto) {
+        return contactService.filterContacts(dto);
     }
 }
