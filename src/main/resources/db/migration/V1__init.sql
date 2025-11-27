@@ -32,3 +32,17 @@ CREATE TABLE contracts (
     contractDownloadLink VARCHAR(1024),
     customization VARCHAR(4096)
 );
+
+CREATE TABLE contacts (
+    contactId SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    institution VARCHAR(100) NOT NULL,
+    designation VARCHAR(20),
+    phone VARCHAR(20) NOT NULL,
+    phone2 VARCHAR(20),
+    email VARCHAR(50),
+    whatsapp VARCHAR(20),
+    isCurrent BOOLEAN NOT NULL DEFAULT TRUE,
+    relevantDept VARCHAR(200),
+    extraInfo VARCHAR(1000)
+);
