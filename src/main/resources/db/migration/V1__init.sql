@@ -16,19 +16,27 @@ CREATE TABLE meetings (
     agenda VARCHAR(1024)
 );
 
-CREATE TABLE pricingTables (
-    tableID SERIAL PRIMARY KEY,
-    data VARCHAR(4096)
-);
-
 CREATE TABLE contracts (
     contractId SERIAL PRIMARY KEY,
     agreementNo VARCHAR(512) UNIQUE NOT NULL,
+    agreementName VARCHAR(512) NOT NULL,
+    signingDate DATE NOT NULL,
     startDate DATE NOT NULL,
     endingDate DATE NOT NULL,
+    companyRegNo VARCHAR(200) NOT NULL,
+    registrationAddress VARCHAR(512),
+    administrativeAddress VARCHAR(512),
+    operationAddress VARCHAR(512),
     bsclSignatoryId INTEGER REFERENCES users(userid),
     contractorSignatory VARCHAR(1024) NOT NULL,
-    pricingId INTEGER REFERENCES pricingTables(tableID),
+    contact1 VARCHAR(1024),
+    contact2 VARCHAR(1024),
+    contact3 VARCHAR(1024),
+    totalPrice INTEGER NOT NULL,
+    emergencyContact1 VARCHAR(1024),
+    emergencyContact2 VARCHAR(1024),
+    emergencyContact3 VARCHAR(1024),
+    emergencyContact4 VARCHAR(1024),
     contractDownloadLink VARCHAR(1024),
     customization VARCHAR(4096)
 );
