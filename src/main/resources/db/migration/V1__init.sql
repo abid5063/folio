@@ -32,11 +32,14 @@ CREATE TABLE contracts (
     contact1 VARCHAR(1024),
     contact2 VARCHAR(1024),
     contact3 VARCHAR(1024),
+    bandwidth VARCHAR(100),
     totalPrice INTEGER NOT NULL,
-    emergencyContact1 VARCHAR(1024),
-    emergencyContact2 VARCHAR(1024),
-    emergencyContact3 VARCHAR(1024),
-    emergencyContact4 VARCHAR(1024),
+    securityDeposit VARCHAR(100),
+    bankAccNo VARCHAR(256),
+    emergencyContact1 VARCHAR(1024),    //escalation matrix
+    emergencyContact2 VARCHAR(1024),    //escalation matrix
+    emergencyContact3 VARCHAR(1024),    //escalation matrix
+    emergencyContact4 VARCHAR(1024),    //escalation matrix
     contractDownloadLink VARCHAR(1024),
     customization VARCHAR(4096)
 );
